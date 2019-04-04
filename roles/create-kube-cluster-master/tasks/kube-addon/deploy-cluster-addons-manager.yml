@@ -1,0 +1,39 @@
+---
+
+# file: deploy-cluster-addon-manager.yml
+#
+
+# func:
+#   . create cluster addon manager
+
+
+####################################################
+# create addon directory
+#
+
+#- name: create cluster addon directory
+#  file:
+#    path: "{{ kube_cluster_addon_path }}/"
+#    state: directory
+#    owner: "{{ kube_user }}"
+#    group: "{{ kube_group }}"
+#    mode: 0644
+
+- name: create cluster addon-manager yaml files
+  template:
+    src: "addon/addon-manager/{{ item }}.j2" 
+    dest: "{{ kube_cluster_addon_path }}/{{ item }}"
+    owner: "{{ kube_user }}"
+    group: "{{ kube_group }}"
+    mode: 0644
+  with_items:
+    - addon-manager.yaml
+
+- name: create cluster addon-manager
+  command: "{{ bin_path }}/kubectl create -f {{ kube_cluster_addon_path }}/addon-manager.yaml"
+  run_once: true
+  delegate_to: "{{ groups['kube-masters'][0] }}"
+
+- name:
+  debug:
+    msg: "Finished. addon-manger addon is deployed on cluster"

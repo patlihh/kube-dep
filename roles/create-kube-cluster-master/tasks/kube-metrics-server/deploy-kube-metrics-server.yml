@@ -1,0 +1,40 @@
+---
+
+# file: deploy-kube-metrics-server.yml
+#
+
+# func:
+#   . metrics-server file in (/etc/kubernetes/metrics-server/*)
+
+
+#- name: create metrics-server yaml files
+#  template:
+#    src: "addon/metrics-server/{{ item }}.j2" dest: "{{ kube_metrics_server_path }}/{{ 
+#  item }}" owner: "{{ kube_user }}" group: "{{ kube_group }}" mode: 0644 with_items:
+#    - auth-delegator.yaml - auth-reader.yaml - metrics-apiservice.yaml
+#    - metrics-server-deployment.yaml
+#    - metrics-server-service.yaml
+#    - resource-reader.yaml
+#    - auth-reader-user.yaml
+
+
+- name: create metrics-server yaml files
+  template:
+    src: "addon/metrics-server_alt/{{ item }}.j2"
+    dest: "{{ kube_metrics_server_path }}/{{ item }}"
+    owner: "{{ kube_user }}"
+    group: "{{ kube_group }}"
+    mode: 0644
+  with_items:
+    - metrics-server.yaml
+
+- name: create kube metrics-server addon pod
+  command: "{{ bin_path }}/kubectl create -f {{ kube_metrics_server_path }}/metrics-server.yaml"
+  run_once: true
+  delegate_to: "{{ groups['kube-masters'][0] }}"
+
+- name:
+  debug:
+    msg: "Finished. metrics-server addon is deployed on cluster."
+
+

@@ -1,16 +1,24 @@
 node0 ansible_connection=local
 
+[ansible-nodes]
+node0
+
 [cluster]
 node1
 node2
+node3
 
 node4
 node5
 node6
 
+node7
+node8
+node9
 [kube-masters]
 node1
 node2
+node3
 
 [load-balancer]
 lb-node
@@ -22,17 +30,22 @@ node6
 
 
 [etcd-nodes]
-node11
-node12
-node13
+node7
+node8
+node9
 
 [docker-nodes]
 node1
 node2
+node3
 
 node4
 node5
 node6
 
+node7
+node8
+node9
 [ntp-master-node]
 node1
+

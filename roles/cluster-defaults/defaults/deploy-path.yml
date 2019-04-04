@@ -10,7 +10,9 @@
 # data path for deployment on ansible deploy site
 
 # local data path for deployment
-dep_data_path: "dep-data"
+#dep_data_path: "dep-data"
+# as we change playbooks in playbooks/ directory, need backward dep_data_path to ../dep-data/
+dep_data_path: "../dep-data"
 
 # path for local binary/image files (on ansible deploy site)
 dep_path_local_bin: "{{ dep_data_path }}/bin-local"
@@ -78,6 +80,10 @@ dep_path_backup_cert: "{{ dep_data_path }}/cert-local"
 ###############################################################################
 # path for kube config backup
 dep_path_backup_kube_config: "{{dep_data_path }}/kube-config-local"
+
+##############################################################################
+# path for kube aggregator client config backup
+#dep_path_backup_kube_aggregator_client_config: "{{dep_data_path }}/kube-config-local"
 
 ##############################################################################
 # local temp exchange directory

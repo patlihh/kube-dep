@@ -77,10 +77,10 @@ ExecStart={{ bin_path }}/kube-controller-manager \
 # (if insecure port disable, # kubectl get cs will display un-health as apiserser
 #    use http://127.0.0.1:10252 to check component status.
 #  but, cluster is health. check using:
-#    # curl https://10.0.0.101:10259/healthz -k
-#    # curl https://10.0.0.101:10257/healthz -k
-#    # curl https://10.0.0.101:10259/metrics -k
-#    # curl https://10.0.0.101:10257/metrics -k
+#    # curl https://192.168.20.101:10259/healthz -k
+#    # curl https://192.168.20.101:10257/healthz -k
+#    # curl https://192.168.20.101:10259/metrics -k
+#    # curl https://192.168.20.101:10257/metrics -k
 #)
 
 # --cluster-sign-cert-file - must be same as --client-cert-file in apiserver

@@ -1,0 +1,6 @@
+---
+
+host_ip_address: "192.168.20.103"
+ansible_hostname: node3
+docker_subnet_cidr: "172.16.1.0/24"
+docker_subnet_bip: "172.16.1.1/24"

@@ -61,7 +61,7 @@ kuberouter_router_reflector_cluster_id: 42
 #      # kubectl annotate node <kube-node> "kube-router.io/peer.ips=192.168.1.99,192.168.1.100"
 #      # kubectl annotate node <kube-node> "kube-router.io/peer.asns=65000,65000"
 #
-kuberouter_peer_router_ips: "10.0.0.101,10.0.0.102"
+kuberouter_peer_router_ips: "192.168.20.101,192.168.20.102,192.168.20.103"
 #kuberouter_peer_router_asns: "65000,65000"
 kuberouter_peer_router_asns: 64513
 
