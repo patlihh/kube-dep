@@ -25,38 +25,23 @@
 
 ###
   roles:
-    - { role: ../roles/cluster-defaults }
+    - role: ../roles/cluster-defaults 
 
-  roles:
-    - { role: ../roles/gen-root-ca-cert }
-
+# roles:
+    - role: ../roles/gen-root-ca-cert 
+      when: sw_gen_root_ca
+   
 # 1.2
 #   generate kube ca/cert cache on node #1 of cluster masters
 
-- hosts: "{{ groups['ansible-nodes'][0] }}"
-  become: yes
-
-###
-  roles:
-    - { role: ../roles/cluster-defaults }
-
-  roles:
-    - { role: ../roles/gen-kube-ca-cert }
-
+    - role: ../roles/gen-kube-ca-cert 
+      when: sw_gen_kube_ca
 # 1.3
 #   generate etcd ca/cert cache on node #1 of cluster masters
 #     (etcd ca cert, etcd service and etcdctl enviroment)
 
-- hosts: "{{ groups['ansible-nodes'][0] }}"
-  become: yes
-
-###
-  roles:
-    - { role: ../roles/cluster-defaults }
-
-  roles:
-    - { role: ../roles/gen-etcd-ca-cert }
-
+    - role: ../roles/gen-etcd-ca-cert
+      when: sw_gen_etcd_ca
 # 2.
 #   create etcd cluster on etcd cluster nodes - node group of group[etcd-nodes]
 
@@ -65,10 +50,11 @@
 
 ###
   roles:
-    - { role: ../roles/cluster-defaults }
+    - role: ../roles/cluster-defaults
 
-  roles:
-    - { role: ../roles/create-etcd-cluster }
+# roles:
+    - role: ../roles/create-etcd-cluster
+      when: sw_create_etcd_nodes
 
 # 3.
 #   create cluster masters on kube cluster masters
@@ -79,17 +65,16 @@
 #       kubectl client enviroment,
 #       rbac roles for apiserver-kubelet, kubelet bootstrap
 #     )
-
 - hosts: kube-masters
   become: yes
 
 ###
   roles:
-    - { role: ../roles/cluster-defaults }
+    - role: ../roles/cluster-defaults
 
-  roles:
-    - { role: ../roles/create-kube-cluster-master }
-
+# roles:
+    - role: ../roles/create-kube-cluster-master
+      when: sw_create_kube_master_nodes
 # 4.
 #   prost process for cluster masters
 #
@@ -107,8 +92,8 @@
 
 ###
   roles:
-    - { role: ../roles/cluster-defaults }
+    - role: ../roles/cluster-defaults
 
-  roles:
-    - { role: ../roles/create-kube-worker-node }
-
+# roles:
+    - role: ../roles/create-kube-worker-node
+      when: sw_create_kube_worker_nodes

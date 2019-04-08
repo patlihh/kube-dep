@@ -103,6 +103,9 @@ data:
   NannyConfiguration: |-
     apiVersion: nannyconfig/v1alpha1
     kind: NannyConfiguration
+    baseCPU: 100m
+    cpuPerNode: 5m
+    baseMemory: 200Mi
 
 ---
 # deployment - metrics-server-v0.3.1
@@ -110,7 +113,7 @@ data:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: metrics-server-v0.3.1
+  name: metrics-server
   namespace: kube-system
   labels:
     k8s-app: metrics-server
@@ -134,14 +137,15 @@ spec:
     spec:
       priorityClassName: system-cluster-critical
       serviceAccountName: metrics-server
-      hostNetwork: true
+      #hostNetwork: true
       containers:
       - name: metrics-server
         image: k8s.gcr.io/metrics-server-amd64:v0.3.1
         #imagePullPolicy: Always
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 443
+          #- containerPort: 443
+          - containerPort: {{ metrics_server_secure_port }}
             name: https
             protocol: TCP
         command:
@@ -199,11 +203,11 @@ spec:
         image: k8s.gcr.io/addon-resizer:1.8.4
         resources:
           limits:
-            cpu: 100m
-            memory: 300Mi
+            cpu: 300m
+            memory: 400Mi
           requests:
-            cpu: 5m
-            memory: 50Mi
+            cpu: 100m
+            memory: 200Mi
         env:
           - name: MY_POD_NAME
             valueFrom:
@@ -220,11 +224,11 @@ spec:
           - /pod_nanny
           - --config-dir=/etc/config
           - --cpu={{ base_metrics_server_cpu }}
-          - --extra-cpu=0.5m
+          - --extra-cpu=5m
           - --memory={{ base_metrics_server_memory }}
           - --extra-memory={{ metrics_server_memory_per_node }}
           - --threshold=5
-          - --deployment=metrics-server-v0.3.1
+          - --deployment=metrics-server
           - --container=metrics-server
           - --poll-period=300000
           - --estimator=exponential
@@ -269,15 +273,13 @@ spec:
     k8s-app: metrics-server
   type: NodePort
   ports:
-    - port: 443
+    # port - 443
+    - port: {{ metrics_server_secure_port }}
       protocol: TCP
-      #targetPort: 443
-      # use hostnetwork and https - 4433 port before we fix master networking and 
-      #   will change into use nodePort - 30000
-      #targetPort: https
-      targetPort: {{ metrics_server_secure_port }}
-      # use nodePort - 30000
-      #nodePort: {{ metrics_server_secure_port }}
+      # target port - 443
+      targetPort: {{ metrics_server_targetport }}
+      # node port - 30000
+      nodePort: {{ metrics_server_nodeport }}
 
 ---
 # cluster role - system:metrics-server

@@ -109,4 +109,11 @@
     file: defaults/metrics-server-default-setting.yml
   run_once: true
 
+#14. switch.yml
+# include switch var
+- name: INCLUDE VAR switch.yml
+  include_vars:
+    file: defaults/switch.yml
+  run_once: true
+
 

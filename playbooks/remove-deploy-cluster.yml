@@ -17,7 +17,7 @@
 #
     - name: remove actions taken by procedure of create-kube-worker-node role
       include: ../roles/create-kube-worker-node/tasks/remove-create-kube-worker-node-ex.yml
-
+      when: sw_create_kube_worker_nodes
 ######################################################################
 
 # 0.
@@ -53,7 +53,7 @@
 
     - name: remove actions taken by procedure of create-kube-cluster-master role
       include: ../roles/create-kube-cluster-master/tasks/remove-create-kube-cluster-master-ex.yml
-
+      when: sw_create_kube_master_nodes
 # 2.
 #   remove deploy process of create-etcd-cluster
 
@@ -72,7 +72,7 @@
 
     - name: remove actions taken by procedure of create-etcd-cluster task
       include: ../roles/create-etcd-cluster/tasks/remove-create-etcd-cluster.yml
-
+      when: sw_create_etcd_nodes
 
 # 3.
 #   remove cert cache on node #1 of cluster masters
@@ -99,7 +99,7 @@
 #
     - name: remove procedure of role gen-etcd-ca-cert
       include: ../roles/gen-etcd-ca-cert/tasks/remove-gen-etcd-ca.yml
-
+      when: sw_gen_etcd_ca
 # 3.2
 #   exec remove-gen-kube-ca
 
@@ -120,7 +120,7 @@
 #
     - name: remove procedure of role gen-kube-ca-cert
       include: ../roles/gen-kube-ca-cert/tasks/remove-gen-kube-ca.yml
-
+      when: sw_gen_kube_ca
 # 3.3
 #   exec remove-gen-root-ca
 
@@ -141,9 +141,10 @@
 #
     - name: remove procedure of role gen-root-ca-cert
       include: ../roles/gen-root-ca-cert/tasks/remove-gen-root-ca.yml
-
+      when: sw_gen_root_ca
 #     remove cert cache dir on remote
     - name: remove cert cache directory on remote
       file:
         path: "{{ cert_cache_path }}"
         state: absent
+      when: sw_gen_root_ca  

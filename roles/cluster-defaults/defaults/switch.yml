@@ -1,0 +1,19 @@
+---
+
+# kubenertes cluster options
+#
+
+sw_gen_root_ca: true
+sw_gen_kube_ca: true
+sw_gen_etcd_ca: true
+
+
+sw_create_etcd_nodes: true
+
+
+sw_create_kube_master_nodes: true 
+
+
+sw_create_kube_worker_nodes: true
+
+
