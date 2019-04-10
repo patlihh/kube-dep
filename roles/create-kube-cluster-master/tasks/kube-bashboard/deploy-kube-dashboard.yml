@@ -1,0 +1,61 @@
+---
+
+# file: deploy-kube-dashboard.yml
+#
+
+# func:
+#   . metrics-server file in (/etc/kubernetes/dashboard/*)
+
+
+#- name: create metrics-server yml files
+#  template:
+#    src: "addon/metrics-server/{{ item }}.j2" dest: "{{ kube-metrics-server-path }}/{{ 
+#  item }}" owner: "{{ kube-user }}" group: "{{ kube-group }}" mode: 0644 with-items:
+#    - auth-delegator.yml - auth-reader.yml - metrics-apiservice.yml
+#    - metrics-server-deployment.yml
+#    - metrics-server-service.yml
+#    - resource-reader.yml
+#    - auth-reader-user.yml
+
+
+- name: create dashboard yml files
+  template:
+    src: "addon/dashboard/{{ item }}.j2"
+    dest: "{{ kube_dashboard_path }}/{{ item }}"
+    owner: "{{ kube_user }}"
+    group: "{{ kube_group }}"
+    mode: 0644
+  with_items: 
+    - dashboard-cluster-role-binding-admin.yaml
+    - dashboard-service-account-admin.yaml
+    - grafana.yaml 
+    - heapster.yaml
+    - heapster-rbac.yaml
+    - influxdb.yaml
+    - kubernetes-dashboard.yaml
+
+- name: create kube dashboard addon pod
+  command: "{{ bin_path }}/kubectl create -f {{ kube_dashboard_path }}/"
+  run_once: true
+  delegate_to: "{{ groups['kube-masters'][0] }}"
+
+- name: copy generate-user-cert.sh to node1
+  copy:
+    src: generate-user-cert.sh
+    dest: "{{ kube_dashboard_path  }}/generate-user-cert.sh"
+    owner: root
+    group: root
+    mode: 0777
+
+- name: generate user cert for browser
+  command: sh "{{ kube_dashboard_path  }}/generate-user-cert.sh"
+  run_once: true
+  delegate_to: "{{ groups['kube-masters'][0]  }}"
+  args:
+    chdir: "{{ kube_dashboard_path  }}/"
+
+- name:
+  debug:
+    msg: "Finished. dashboard addon is deployed on cluster."
+
+

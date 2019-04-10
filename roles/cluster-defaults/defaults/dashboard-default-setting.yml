@@ -1,0 +1,9 @@
+---
+
+# file: dashboard-default-setting.yml
+
+
+# METRICS-SERVER DEPLOY FILE DIRECTORY
+#
+dashboard_yaml_path: "{{ kube_config_path }}/dashboard"
+

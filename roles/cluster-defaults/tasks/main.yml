@@ -116,4 +116,11 @@
     file: defaults/switch.yml
   run_once: true
 
+#15. dashboard.yml
+# include dashboard var
+- name: INCLUDE VAR dashboard-default-setting.yml
+  include_vars:
+    file: defaults/dashboard-default-setting.yml
+  run_once: true
+
 

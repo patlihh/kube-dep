@@ -106,6 +106,10 @@ kube_metrics_server_path: "{{ kube_config_path }}/metrics-server"
 # node-problem-detector addon daemonset yaml file path - /etc/kubernetes/node-problem-detector
 kube_node_problem_detector_path: "{{ kube_config_path }}/node-problem-detector"
 
+# dashboard yaml file path - /etc/kubernetes/dashboard
+kube_dashboard_path: "{{ kube_config_path }}/dashboard"
+
+
 #### ip-masq-agent config
 #      /etc/config/ip-masq-agent
 kube_ipmasq_agent_config_path: "/etc/config/ip-masq-agent"
